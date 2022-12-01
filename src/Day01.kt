@@ -1,18 +1,15 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    var maxTotal = 0
+    var currentTotal = 0
+    readInput("Day01").forEach {line ->
+        if (line.isBlank()) {
+            if (currentTotal > maxTotal) {
+                maxTotal = currentTotal
+            }
+            currentTotal = 0
+        } else {
+            currentTotal += line.toInt()
+        }
     }
-
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
-
-
-    // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    val input = readInput("Day01")
-    println(part1(input))
-    println(part2(input))
+    println(maxTotal)
 }
