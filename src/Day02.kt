@@ -3,14 +3,27 @@ import Choice.*
 fun main() {
     val total = readInput("Day02")
         .map { line -> line.split("\\s".toRegex()) }
-        .map { Battle(it) }
+        .map { BattleV1(it) }
         .sumOf { it.calculate() }
 
     println("Total: $total")
+
+    val total2 = readInput("Day02")
+        .map { line -> line.split("\\s".toRegex()) }
+        .map { BattleV2(it) }
+        .sumOf { it.calculate() }
+
+    println("Total2: $total2")
 }
 
-private data class Battle(val opponent: Choice, val you: Choice) {
+private data class BattleV1(val opponent: Choice, val you: Choice) {
     constructor(line: List<String>) : this(line[0].firstPlayer(), line[1].secondPlayer())
+
+    fun calculate(): Int = you.value + battle(you, opponent)
+}
+
+private data class BattleV2(val opponent: Choice, val you: Choice) {
+    constructor(line: List<String>) : this(line[0].firstPlayer(), line[1].desiredOutcome(line[0].firstPlayer()))
 
     fun calculate(): Int = you.value + battle(you, opponent)
 }
@@ -43,4 +56,27 @@ private fun String.secondPlayer(): Choice = when (this) {
     "Y" -> PAPER
     "Z" -> SCISSORS
     else -> error("Invalid choice $this")
+}
+
+private fun String.desiredOutcome(opponent: Choice): Choice = when (this) {
+    "X" -> opponent.losingValue()
+    "Y" -> opponent
+    "Z" -> opponent.winningValue()
+    else -> error("Invalid choice $this")
+}
+
+private fun Choice.losingValue() : Choice {
+    return when(this) {
+        ROCK -> SCISSORS
+        PAPER -> ROCK
+        SCISSORS -> PAPER
+    }
+}
+
+private fun Choice.winningValue() : Choice {
+    return when(this) {
+        ROCK -> PAPER
+        PAPER -> SCISSORS
+        SCISSORS -> ROCK
+    }
 }

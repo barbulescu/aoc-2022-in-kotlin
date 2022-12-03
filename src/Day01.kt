@@ -1,15 +1,24 @@
 fun main() {
-    var maxTotal = 0
-    var currentTotal = 0
-    readInput("Day01").forEach {line ->
-        if (line.isBlank()) {
-            if (currentTotal > maxTotal) {
-                maxTotal = currentTotal
-            }
-            currentTotal = 0
-        } else {
-            currentTotal += line.toInt()
-        }
+    var groupTotal = 0
+    val groups = buildList<Int> {
+        readInput("Day01")
+            .forEach { line -> groupTotal = processLine(line, groupTotal) }
+        add(groupTotal)
     }
-    println(maxTotal)
+        .sorted()
+        .reversed()
+
+    println("Max: ${groups.first()}")
+    val sumOfTopThree = groups.take(3)
+        .sum()
+    println("Sum of top 3: $sumOfTopThree")
+}
+
+private fun MutableList<Int>.processLine(line: String, groupTotal: Int): Int {
+    return if (line.isBlank()) {
+        this.add(groupTotal)
+        0
+    } else {
+        groupTotal + line.toInt()
+    }
 }

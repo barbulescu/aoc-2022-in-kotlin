@@ -11,7 +11,22 @@ fun main() {
         .sumOf { it.first() }
 
     println("Total: $total")
+
+    val badgeTotal = readInput("Day03")
+        .asSequence()
+        .map(::toPriorities)
+        .chunked(3)
+        .onEach { require(it.size == 3) { "each group must have 3 elves" } }
+        .map { findBadge(it) }
+        .onEach { require(it.size == 1) { "only 1 badge must be common" } }
+        .map { it.first() }
+        .sum()
+
+    println("Badge total: $badgeTotal")
 }
+
+fun findBadge(group: List<List<Int>>): Set<Int> =
+    group[0].intersect(group[1].toSet()).intersect(group[2].toSet())
 
 fun split(line: String): Pair<String, String> {
     val middle = line.length / 2
