@@ -1,7 +1,10 @@
+package day3
+
+import readInput
 import kotlin.streams.toList
 
 fun main() {
-    val total = readInput("Day03")
+    val total = readInput("day3/Day03")
         .asSequence()
         .map(::toPriorities)
         .map { it.chunked(it.size / 2) }
@@ -12,7 +15,7 @@ fun main() {
 
     println("Total: $total")
 
-    val badgeTotal = readInput("Day03")
+    val badgeTotal = readInput("day3/Day03")
         .asSequence()
         .map(::toPriorities)
         .chunked(3)
