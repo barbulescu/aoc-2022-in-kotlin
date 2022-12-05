@@ -34,10 +34,12 @@ private data class Stacks(private val stacks: List<ArrayDeque<String>>) {
     fun size(): Int = stacks.size
 
     fun operate(operation: Operation): Stacks {
+        val buffer = mutableListOf<String>()
         repeat(operation.quantity) {
             val value = stacks[operation.from].removeFirst()
-            stacks[operation.to].addFirst(value)
+            buffer.add(value)
         }
+        stacks[operation.to].addAll(0, buffer)
         return this
     }
 
