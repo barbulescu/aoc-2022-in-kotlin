@@ -7,7 +7,7 @@ private val root = Directory(null, "/")
 fun main() {
 
     var currentDirectory = root
-    val content = readInput("day7/Day07").joinToString(separator = "|")
+    val content = readInput("day7/Day07_test").joinToString(separator = "|")
     content.split("$").asSequence()
         .map { it.trim() }
         .filterNot { it.isBlank() }
@@ -21,10 +21,16 @@ fun main() {
     println("----------------------------")
     println()
 
-    val sum = root.totalSize()
+    val sizes = root.totalSize().sorted().reversed()
+    val sum = sizes
         .filter { it < 100000 }
         .sum()
     println("Sum of folder under 100000 is $sum")
+
+    sizes.forEach { println(it) }
+    val totalSpace = 70000000
+    val neededSpace = 30000000 - (totalSpace - sizes.first())
+    println("Needed: $neededSpace")
 }
 
 private fun executeCommand(currentDirectory: Directory, commandText: String): Directory =
