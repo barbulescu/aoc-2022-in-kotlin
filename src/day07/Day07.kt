@@ -7,7 +7,7 @@ private val root = Directory(null, "/")
 fun main() {
 
     var currentDirectory = root
-    val content = readInput("day07/Day07_test").joinToString(separator = "|")
+    val content = readInput("day07/Day07").joinToString(separator = "|")
     content.split("$").asSequence()
         .map { it.trim() }
         .filterNot { it.isBlank() }
@@ -15,22 +15,32 @@ fun main() {
         .onEach { println("Line: $it") }
         .forEach { currentDirectory = executeCommand(currentDirectory, it) }
 
+    root.calculateTotalSize()
+
     println()
     println("----------------------------")
     root.printTree("")
     println("----------------------------")
     println()
 
-    val sizes = root.totalSize().sorted().reversed()
+    val sizes = mutableListOf<Int>()
+    root.collectTotalSizes(sizes)
+
     val sum = sizes
         .filter { it < 100000 }
         .sum()
     println("Sum of folder under 100000 is $sum")
 
-    sizes.forEach { println(it) }
     val totalSpace = 70000000
-    val neededSpace = 30000000 - (totalSpace - sizes.first())
-    println("Needed: $neededSpace")
+    val necessarySpace = 30000000
+    val currentFreeSpace = totalSpace - root.totalSize()
+    val spaceToFree = necessarySpace - currentFreeSpace
+    println("current free space: $currentFreeSpace and space to free up $spaceToFree")
+
+    val directoryToDelete = sizes
+        .filter { it >= spaceToFree }
+        .minOf { it }
+    println("Directory to delete: $directoryToDelete")
 }
 
 private fun executeCommand(currentDirectory: Directory, commandText: String): Directory =
@@ -63,6 +73,7 @@ private fun executeCommand(currentDirectory: Directory, commandText: String): Di
 private class Directory(val parent: Directory?, val name: String) {
     private val files = mutableListOf<File>()
     private val directories = mutableListOf<Directory>()
+    private var totalSize: Int = 0
 
     fun addFile(filename: String, size: Int): Directory {
         files.add(File(filename, size))
@@ -84,17 +95,25 @@ private class Directory(val parent: Directory?, val name: String) {
     }
 
     fun printTree(prefix: String) {
-        println("$prefix- $name (dir)")
+        println("$prefix- $name (dir, size=$totalSize)")
         directories.forEach { it.printTree("  $prefix") }
         files.forEach { println("$prefix  - ${it.name} (file, size=${it.size})") }
     }
 
-    fun totalSize(): List<Int> {
-        val subSizes = directories.flatMap { it.totalSize() }
+    fun calculateTotalSize() {
+        val subSizes = directories
+            .onEach { it.calculateTotalSize() }
+            .sumOf { it.totalSize }
         val fileSizes = files.sumOf { it.size }
-        val localSize = subSizes.sum() + fileSizes
-        return subSizes + localSize
+        totalSize = subSizes + fileSizes
     }
+
+    fun collectTotalSizes(collector: MutableList<Int>) {
+        directories.forEach { it.collectTotalSizes(collector) }
+        collector.add(this.totalSize)
+    }
+
+    fun totalSize() = totalSize
 }
 
 
