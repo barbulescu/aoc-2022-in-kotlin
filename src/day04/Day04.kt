@@ -1,9 +1,9 @@
-package day4
+package day04
 
 import readInput
 
 fun main() {
-    val pairs = readInput("day4/Day04")
+    val pairs = readInput("day04/Day04")
         .map { it.split(",") }
         .onEach { require(it.size == 2) { "expected 2 ranges" } }
         .map { parseRange(it[0]) to parseRange(it[1]) }

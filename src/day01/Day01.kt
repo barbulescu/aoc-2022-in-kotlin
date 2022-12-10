@@ -1,11 +1,11 @@
-package day1
+package day01
 
 import readInput
 
 fun main() {
     var groupTotal = 0
     val groups = buildList<Int> {
-        readInput("day1/Day01")
+        readInput("day01/Day01")
             .forEach { line -> groupTotal = processLine(line, groupTotal) }
         add(groupTotal)
     }

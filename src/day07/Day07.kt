@@ -1,4 +1,4 @@
-package day7
+package day07
 
 import readInput
 
@@ -7,7 +7,7 @@ private val root = Directory(null, "/")
 fun main() {
 
     var currentDirectory = root
-    val content = readInput("day7/Day07_test").joinToString(separator = "|")
+    val content = readInput("day07/Day07_test").joinToString(separator = "|")
     content.split("$").asSequence()
         .map { it.trim() }
         .filterNot { it.isBlank() }

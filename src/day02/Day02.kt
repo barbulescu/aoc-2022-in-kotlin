@@ -1,17 +1,17 @@
-package day2
+package day02
 
-import day2.Choice.*
+import day02.Choice.*
 import readInput
 
 fun main() {
-    val total = readInput("day2/Day02")
+    val total = readInput("day02/Day02")
         .map { line -> line.split("\\s".toRegex()) }
         .map { BattleV1(it) }
         .sumOf { it.calculate() }
 
     println("Total: $total")
 
-    val total2 = readInput("day2/Day02")
+    val total2 = readInput("day02/Day02")
         .map { line -> line.split("\\s".toRegex()) }
         .map { BattleV2(it) }
         .sumOf { it.calculate() }

@@ -1,10 +1,10 @@
-package day5
+package day05
 
 import readInput
 import java.lang.IllegalArgumentException
 
 fun main() {
-    val lines = readInput("day5/Day05")
+    val lines = readInput("day05/Day05")
     val (stackLines, operationLines) = splitLines(lines)
 
     val stacks = buildStacks(stackLines)
